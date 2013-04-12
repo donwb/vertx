@@ -1,0 +1,3 @@
+ vertx install vertx.mongo-persistor-v1.2 -repo vert-x.github.io
+
+
