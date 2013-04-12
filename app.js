@@ -12,13 +12,14 @@ var config = {
 	"password" : "flow1234"
 }
 
-rm.get('/name', function(req) {
-	req.response.end('{"name":"don"}');
-});
 
-rm.get('/test', function(req) {
+rm.get('/network/:code', function(req) {
+	var code = req.params()['code'];
+
+	console.log('finding network: ' + code);
+
 	var action = 'findone';
-	var matcher = {"Code" : "CTN"};
+	var matcher = {"Code" : code};
 
 	var wrapper = {"collection" : "network",
 					"action" : action,
@@ -28,17 +29,27 @@ rm.get('/test', function(req) {
 
 	eb.send('vertx.mongopersistor', wrapper, function(reply) {
 		//console.log(JSON.stringify(reply.result));
+		// when doing a findone the result is wrapped in "result"
 		var result = reply.result;
 		req.response.end(JSON.stringify(result));
 	})
 
 });
 
-rm.get('/echo/:name', function(req) {
-	var name = req.params()['name'];
-	req.response.end('{"name":"' + name + '"}');
-	//req.resonse.end('test');
+rm.get('/networks', function(req) {
+	console.log('finding all networks');
+
+	var action = 'find';
+	var matcher = {};
+	var wrapper = {"collection" : "network", "action" : action, "matcher" : matcher};
+
+	eb.send('vertx.mongopersistor', wrapper, function(reply) {
+		// when doing a find, the result is wrapped in "results"
+		var result = reply.results;
+		req.response.end(JSON.stringify(result));
+	})
 });
+
 
 rm.getWithRegEx('.*', function(req) {
 	req.response.sendFile("index.html");
