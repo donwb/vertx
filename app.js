@@ -25,10 +25,7 @@ rm.get('/network/:code', function(req) {
 					"action" : action,
 					"matcher" : matcher};
 
-	//console.log(JSON.stringify(wrapper));
-
 	eb.send('vertx.mongopersistor', wrapper, function(reply) {
-		//console.log(JSON.stringify(reply.result));
 		// when doing a findone the result is wrapped in "result"
 		var result = reply.result;
 		req.response.end(JSON.stringify(result));
@@ -50,6 +47,9 @@ rm.get('/networks', function(req) {
 	})
 });
 
+rm.get('/mu-3fb8ca5b-1a109a61-53cb32bd-c47e007e', function(req) {
+	req.response.end('42');
+})
 
 rm.getWithRegEx('.*', function(req) {
 	req.response.sendFile("index.html");
