@@ -47,6 +47,25 @@ rm.get('/networks', function(req) {
 	})
 });
 
+rm.get('/tms/:id', function(req) {
+	var id = req.params()['id'];
+	var url = '/v1/programs/' + id + '?api_key=h5t2xh7qeu6un2e86arp7673';
+
+	console.log('getting detail for: ' + id);
+
+
+	vertx.createHttpClient()
+		.setPort(80)
+		.setHost('data.tmsapi.com')
+		.getNow(url, function(res) {
+		
+		console.log('got response: ' + res.statusCode);
+		res.bodyHandler(function(body) {
+			req.response.end(body);
+		});
+	});
+});
+
 rm.get('/mu-3fb8ca5b-1a109a61-53cb32bd-c47e007e', function(req) {
 	req.response.end('42');
 })
